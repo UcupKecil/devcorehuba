@@ -23,6 +23,7 @@ class PenjualanResellerExport implements FromCollection, WithHeadings
             'Jasa Kirim',
             'Biaya Jasa Kirim',
             'Kode Orderan',
+            '(Pcs)',
             'Banyaknya (Bks)',
             'Harga per bks',
             'jumlah',
@@ -31,22 +32,28 @@ class PenjualanResellerExport implements FromCollection, WithHeadings
             
         ];
     }
+    protected $awal;
+    protected $akhir;
+    function __construct($awal,$akhir) {
+        $this->awal = $awal;
+        $this->akhir = $akhir;
+                                }
     public function collection()
     {
-        return DB::table('penjualan_detail')
-        ->join('penjualan', 'penjualan.id_penjualan', '=', 'penjualan_detail.id_penjualan')
-        ->join('member', 'member.kode_member', '=', 'penjualan.kode_member')
-        ->join('produk', 'produk.kode_produk', '=', 'penjualan_detail.kode_produk')
-        ->where('member.jenis_member', '=', 'reseller')
-        ->orderBy('produk.id_produk', 'desc')
+        
+
+        return DB::table('v_pcs')
+       
+        ->where('jenis_member', '=', 'reseller')
+        ->whereBetween('tanggal',[ $this->awal,$this->akhir])
+        //->whereBetween('penjualan.tanggal',[ '2023-02-01','2023-02-01'])
+
+        ->orderBy('tanggal', 'asc')
+        ->orderBy( 'id_penjualan', 'asc')
         ->get([
-                'penjualan.tanggal as tanggal', 'member.nama_sa as namasales', 
-                'member.nama as namakonsumen', 
-                'penjualan.alamat_kirim as alamatkirim', 'member.telpon as nohp',
-                'penjualan.kurir as jasakirim','penjualan.ongkir as biayajasakirim',
-                'produk.nama_produk as namaproduk', 'penjualan_detail.jumlah', 
-                'penjualan_detail.harga_jual', 'penjualan_detail.sub_total',
-                'penjualan.ket_bayar',
+                'tanggal','nama_sa','nama','alamat_kirim','telpon',
+                'kurir','ongkir','nama_produk','pcs','banyak','harga_jual',
+                'sub_total','ket_bayar'
         ]);
 
 

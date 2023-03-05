@@ -816,19 +816,19 @@ class PenjualanController extends Controller
         return Excel::download(new PenjualanExport($awal,$akhir), 'penjualan_enduser.xlsx');
         //return Excel::download(new PenjualanExport, 'enduser.xls', \Maatwebsite\Excel\Excel::XLS);
     }
-    public function exportreseller()
+    public function exportreseller($awal,$akhir)
     {
-        return Excel::download(new PenjualanResellerExport, 'penjualan_reseller.xlsx');
+        return Excel::download(new PenjualanResellerExport($awal,$akhir), 'penjualan_reseller.xlsx');
         //return Excel::download(new PenjualanExport, 'enduser.xls', \Maatwebsite\Excel\Excel::XLS);
     }
-    public function exportdistributor()
+    public function exportdistributor($awal,$akhir)
     {
-        return Excel::download(new PenjualanDistributorExport, 'penjualan_distributor.xlsx');
+        return Excel::download(new PenjualanDistributorExport($awal,$akhir), 'penjualan_distributor.xlsx');
         //return Excel::download(new PenjualanExport, 'enduser.xls', \Maatwebsite\Excel\Excel::XLS);
     }
-    public function exportmarketing()
+    public function exportmarketing($awal,$akhir)
     {
-        return Excel::download(new PenjualanMarketingExport, 'penjualan_marketing.xlsx');
+        return Excel::download(new PenjualanMarketingExport($awal,$akhir), 'penjualan_marketing.xlsx');
         //return Excel::download(new PenjualanExport, 'enduser.xls', \Maatwebsite\Excel\Excel::XLS);
     }
 }

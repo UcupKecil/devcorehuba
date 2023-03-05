@@ -181,9 +181,9 @@ Route::group(['middleware' => 'web'], function(){
     Route::get('penjualan/notapdf/{id}', 'PenjualanController@notaPDF')->name('penjualan.pdf');
     Route::get('penjualan/invoicepdf/{id}', 'PenjualanController@invoicePDF')->name('penjualan.invoicepdf');
     Route::get('exportpenjualan/{awal}/{akhir}', [PenjualanController::class, 'export'])->name('exportpenjualan');
-    Route::get('exportpenjualanreseller', [PenjualanController::class, 'exportreseller'])->name('exportpenjualanreseller');
-    Route::get('exportpenjualandistributor', [PenjualanController::class, 'exportdistributor'])->name('exportpenjualandistributor');
-    Route::get('exportpenjualanmarketing', [PenjualanController::class, 'exportmarketing'])->name('exportpenjualanmarketing');
+    Route::get('exportpenjualanreseller/{awal}/{akhir}', [PenjualanController::class, 'exportreseller'])->name('exportpenjualanreseller');
+    Route::get('exportpenjualandistributor/{awal}/{akhir}', [PenjualanController::class, 'exportdistributor'])->name('exportpenjualandistributor');
+    Route::get('exportpenjualanmarketing/{awal}/{akhir}', [PenjualanController::class, 'exportmarketing'])->name('exportpenjualanmarketing');
     Route::get('export_excel', 'ProdukController@export_excel')->name('export_excel');;
     Route::get('penjualan/data/day/{awal}/{akhir}', 'PenjualanController@listDataday')->name('laporan.dataday');
     Route::get('penjualan/produk/day/{awal}/{akhir}', 'PenjualanController@listProdukday')->name('laporan.produkday');

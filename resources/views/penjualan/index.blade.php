@@ -23,15 +23,15 @@
                               Export Penjualan Enduser
         </a>
         <a class="btn btn-warning"
-                       href="{{ route('exportpenjualanreseller') }}" target="_blank">
+                       href="exportpenjualanreseller/{{$awal}}/{{$akhir}}" target="_blank">
                               Export Penjualan Reseller
         </a>
         <a class="btn btn-warning"
-                       href="{{ route('exportpenjualandistributor') }}" target="_blank">
+                       href="exportpenjualandistributor/{{$awal}}/{{$akhir}}" target="_blank">
                               Export Penjualan Distributor
         </a>
         <a class="btn btn-warning"
-                       href="{{ route('exportpenjualanmarketing') }}" target="_blank">
+                       href="exportpenjualanmarketing/{{$awal}}/{{$akhir}}" target="_blank">
                               Export Penjualan Marketing
         </a>
       </div>
