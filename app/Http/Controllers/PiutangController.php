@@ -27,7 +27,8 @@ class PiutangController extends Controller
      */
     public function index()
     {
-        $awal = date('Y-m-d', mktime(0,0,0, date('m'), 1, date('Y')));
+        //$awal = date('Y-m-d', mktime(0,0,0, date('m'), 1, date('Y')));
+        $awal = '2023-01-01';
         $akhir = date('Y-m-d');
         // $last = date('Y-m-d', strtotime("+1 day", strtotime($akhir)));
         // dd($last);  

@@ -113,11 +113,17 @@ class HomeController extends Controller
         }
 
             $awal = date('Y-m-d', mktime(0,0,0, date('m'), 1, date('Y')));
+            $awalpiutang = '2023-02-01';
             $tanggal = substr($awal, 0, 7);
+            $tanggalpiutang = substr($awalpiutang, 0, 7);
             $awal = date('Y-m-d', strtotime("+1 month", strtotime($awal)));
             $totalpenjualan = Penjualan::where('tanggal', 'LIKE', "$tanggal%")->sum('bayar');
+
+            $awalpiutang =  '2023-01-01';
+            $akhirpiutang = date('Y-m-d');
            
-            $totalpiutang = Penjualan::where('ket_bayar', '=','belum lunas')->where('tanggal', 'LIKE', "$tanggal%")->sum('bayar');
+           
+            $totalpiutang = Penjualan::where('ket_bayar', '=','belum lunas') ->whereBetween('tanggal',[ $awalpiutang,$akhirpiutang])->sum('bayar');
           
             $totaluang = Penjualan::where('ket_bayar', '=','lunas')->where('tanggal', 'LIKE', "$tanggal%")->sum('bayar');
             
