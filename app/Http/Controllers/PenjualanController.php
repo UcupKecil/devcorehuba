@@ -12,6 +12,7 @@ use App\Produk;
 use App\PaketDetail;
 use App\Member;
 use App\Penjualan;
+use App\Pcs;
 use App\Pembelian;
 use App\PenjualanDetail;
 use App\Setting;
@@ -368,6 +369,7 @@ class PenjualanController extends Controller
         $no = 0;
         $data = array();
         $jumlah = 0;
+        $pcs = 0;
         $bayar = 0;
         $tanggal = 0;
         while(strtotime($awal) <= strtotime($akhir)){
@@ -375,7 +377,7 @@ class PenjualanController extends Controller
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
 
             $bayar = Penjualan::where('tanggal', 'LIKE', "$date%")->sum('bayar');
-            // $jumlah = Penjualan::where('created_at', 'LIKE', "$date%")->sum('total_item');
+            $pcs = Pcs::where('tanggal', 'LIKE', "$date%")->sum('pcs');
             $penjualan = Penjualan::where('tanggal', 'LIKE', "$date%")->get();
             foreach($penjualan as $list){
                 $jumlah++;
@@ -385,6 +387,7 @@ class PenjualanController extends Controller
             $row[] = $no;
             $row[] = tanggal_indonesia(substr($date, 0, 10), false);
             $row[] = $jumlah;
+            $row[] = $pcs;
             $row[] = "Rp. ".format_uang($bayar);
             $data[] = $row;
             $jumlah = 0;
@@ -397,6 +400,7 @@ class PenjualanController extends Controller
         $no = 0;
         $data = array();
         $jumlah = 0;
+        $pcs = 0;
         $bayar = 0;
         $tanggal = 0;
         $produk = Produk::where('id_kategori','not like','102')->get();
@@ -404,6 +408,7 @@ class PenjualanController extends Controller
             $date = $awal;
             $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
             foreach($produk as $list){
+                $pcs = Pcs::where('kode_produk', "$list->kode_produk")->where('tanggal', 'LIKE', "$date%")->sum('pcs');
                 $jumlah = PenjualanDetail::where('kode_produk', "$list->kode_produk")->where('tanggal', 'LIKE', "$date%")->sum('jumlah');
                 if($jumlah > 0){
                     $no ++;
@@ -412,6 +417,7 @@ class PenjualanController extends Controller
                     $row[] = "<b>".tanggal_indonesia(substr($date, 0, 10), false)."</b>";
                     $row[] = $list->nama_produk;
                     $row[] = $jumlah;
+                    $row[] = $pcs;
                     $data[] = $row;
                 };
             }
@@ -427,10 +433,12 @@ class PenjualanController extends Controller
         $no = 0;
         $data = array();
         $jumlah = 0;
+        $pcs = 0;
         $bayar = 0;
         $tanggal = 0;
         $count = 1;
         $week = 1;
+        $total_pcs = 0;
         $total_bayar = 0;
         $total_jumlah = 0;
         while(strtotime($awal) <= strtotime($akhir)){
@@ -439,12 +447,14 @@ class PenjualanController extends Controller
                 $date = $hari;
                 $hari = date('Y-m-d', strtotime("+1 day", strtotime($hari)));
                 $bayar = Penjualan::where('tanggal', 'LIKE', "$date%")->sum('bayar');
+                $pcs = Pcs::where('tanggal', 'LIKE', "$date%")->sum('pcs');
                 // $jumlah = Penjualan::where('created_at', 'LIKE', "$date%")->sum('total_item');
                 $penjualan = Penjualan::where('tanggal', 'LIKE', "$date%")->get();
                 foreach($penjualan as $list){
                     $jumlah++;
                 }
                 $total_bayar = $total_bayar + $bayar;
+                $total_pcs = $total_pcs + $pcs;
                 // $total_jumlah = $total_jumlah + $jumlah;
                 $count ++;
             }
@@ -453,14 +463,18 @@ class PenjualanController extends Controller
             $row[] = $no;
             $row[] = "Minggu ke-".$week;
             $row[] = $jumlah;
+            $row[] = $total_pcs;
             $row[] = "Rp. ".format_uang($total_bayar);
             $data[] = $row;
             $week ++;
             $count = 1;
             $total_bayar = 0;
             $jumlah = 0;
+            $pcs = 0;
+            $total_pcs = 0;
             $total_bayar = $total_bayar + $bayar;
             $total_jumlah = $total_jumlah + $jumlah;
+            $total_pcs = $total_pcs + $pcs;
             $awal = date('Y-m-d', strtotime("+8 day", strtotime($awal)));
         }
 
@@ -475,6 +489,7 @@ class PenjualanController extends Controller
         $count = 1;
         $week = 1;
         $sum = 0;
+        $sumpcs = 0;
         $hari = $awal;
         $produk = Produk::where('id_kategori','not like','102')->get();
         while(strtotime($awal) <= strtotime($akhir)){
@@ -483,7 +498,9 @@ class PenjualanController extends Controller
                     $date = $hari;
                     $hari = date('Y-m-d', strtotime("+1 day", strtotime($hari)));
                     $jumlah = PenjualanDetail::where('kode_produk', "$list->kode_produk")->where('tanggal', 'LIKE', "$date%")->sum('jumlah');
+                    $pcs = Pcs::where('kode_produk', "$list->kode_produk")->where('tanggal', 'LIKE', "$date%")->sum('pcs');
                     $sum = $sum + $jumlah;
+                    $sumpcs = $sumpcs + $pcs;
                     $count ++;
                 }
                 if($sum >= 1){
@@ -495,12 +512,15 @@ class PenjualanController extends Controller
                     $row[] = "<b>Minggu ke - ".$week."</b>";
                     $row[] = $list->nama_produk;
                     $row[] = $sum;
+                    $row[] = $sumpcs;
                     $data[] = $row;
                     $sum = 0;
+                    $sumpcs = 0;
                 }else{
                     $count = 1;
                     $hari = $awal;
                     $sum = 0;
+                    $sumpcs = 0;
                 };
             }
             $week ++;
@@ -516,11 +536,13 @@ class PenjualanController extends Controller
         $no = 0;
         $data = array();
         $jumlah = 0;
+        $pcs = 0;
         $bayar = 0;
         while(strtotime($awal) <= strtotime($akhir)){
             $date = substr($awal, 0, 7);
             $awal = date('Y-m-d', strtotime("+1 month", strtotime($awal)));
 
+            $pcs = Pcs::where('tanggal', 'LIKE', "$date%")->sum('pcs');
             $bayar = Penjualan::where('tanggal', 'LIKE', "$date%")->sum('bayar');
             // $jumlah = Penjualan::where('created_at', 'LIKE', "$date%")->sum('total_item');
             $penjualan = Penjualan::where('tanggal', 'LIKE', "$date%")->get();
@@ -532,9 +554,11 @@ class PenjualanController extends Controller
             $row[] = $no;
             $row[] = tanggal_indonesia(substr($date, 0, 7), false);
             $row[] = $jumlah;
+            $row[] = $pcs;
             $row[] = "Rp. ".format_uang($bayar);
             $data[] = $row;
             $jumlah = 0;
+            $pcs = 0;
             
         }
 
@@ -546,6 +570,7 @@ class PenjualanController extends Controller
         $no = 0;
         $data = array();
         $jumlah = 0;
+        $pcs = 0;
         $bayar = 0;
         $produk = Produk::where('id_kategori','not like','102')->get();
         while(strtotime($awal) <= strtotime($akhir)){
@@ -553,6 +578,7 @@ class PenjualanController extends Controller
             $awal = date('Y-m-d', strtotime("+1 month", strtotime($awal)));
             foreach($produk as $list){
                 $jumlah = PenjualanDetail::where('kode_produk', "$list->kode_produk")->where('tanggal', 'LIKE', "$date%")->sum('jumlah');
+                $pcs = Pcs::where('kode_produk', "$list->kode_produk")->where('tanggal', 'LIKE', "$date%")->sum('pcs');
                 if($jumlah > 0){
                 $no ++;
                 $row = array();
@@ -560,6 +586,7 @@ class PenjualanController extends Controller
                 $row[] = tanggal_indonesia(substr($date, 0, 7), false);
                 $row[] = $list->nama_produk;
                 $row[] = $jumlah;
+                $row[] = $pcs;
                 $data[] = $row;
                 };
             }              

@@ -189,6 +189,7 @@
                     <th width="30">No</th>
                     <th>Tanggal</th>
                     <th>Total Transaksi</th>
+                    <th>Total Pcs</th>
                     <th>Total Bayar</th>
                 </tr>
               </thead>
@@ -204,6 +205,7 @@
                     <th>Tanggal</th>
                     <th>Nama Produk</th>
                     <th>Total Item</th>
+                    <th>Total Pcs</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -220,6 +222,7 @@
                     <th width="30">No</th>
                     <th>Minggu ke -</th>
                     <th>Total Transaksi</th>
+                    <th>Total Pcs</th>
                     <th>Total Bayar</th>
                 </tr>
               </thead>
@@ -234,6 +237,7 @@
                     <th>Minggu ke -</th>
                     <th>Nama Produk</th>
                     <th>Total Item</th>
+                    <th>Total Pcs</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -250,6 +254,7 @@
                     <th width="30">No</th>
                     <th>Bulan</th>
                     <th>Total Transaksi</th>
+                    <th>Total Pcs</th>
                     <th>Total Bayar</th>
                 </tr>
               </thead>
@@ -263,6 +268,7 @@
                     <th>Bulan</th>
                     <th>Nama Produk</th>
                     <th>Total Item</th>
+                    <th>Total Pcs</th>
                 </tr>
               </thead>
               <tbody></tbody>
